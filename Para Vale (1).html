@@ -1,0 +1,269 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Para Vale</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap">
+<style>
+/* Layout: una sola columna centrada, gatito arriba, mensajes, juego del "¿Me quieres?", razones al final */
+:root {
+  --bg: #fff0f5;
+  --bg-2: #ffe0ec;
+  --ink: #5a2a43;
+  --ink-soft: #8a5a73;
+  --pink: #ff7eb6;
+  --pink-deep: #e6458d;
+  --cream: #ffe9cf;
+  --card: #ffffff;
+  --font-display: 'Fredoka', 'Trebuchet MS', sans-serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: radial-gradient(circle at 20% 0%, var(--bg-2), var(--bg) 55%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+main { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; align-items: center; }
+h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 9vw, 3rem); color: var(--pink-deep); text-align: center; line-height: 1.1; }
+h2 { font-size: 1.5rem; text-align: center; }
+.sub { margin: 6px 0 0; text-align: center; color: var(--ink-soft); }
+
+.stage { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.bubble {
+  position: relative; background: var(--card); border-radius: 22px; padding: 14px 18px;
+  text-align: center; font-weight: 700; min-height: 3.6em; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 0 var(--bg-2);
+}
+.bubble::after {
+  content: ""; position: absolute; bottom: -10px; left: 50%; width: 20px; height: 20px;
+  background: var(--card); transform: translateX(-50%) rotate(45deg);
+}
+#cat { width: min(260px, 70vw); cursor: pointer; border: 0; background: none; padding: 0; margin-top: 8px; }
+#cat:focus-visible, button:focus-visible { outline: 3px solid var(--pink-deep); outline-offset: 4px; }
+#cat svg { width: 100%; height: auto; display: block; overflow: visible; }
+.bounce { animation: bounce .5s ease; }
+@keyframes bounce { 0%,100% { transform: scale(1); } 30% { transform: scale(1.08, .92); } 60% { transform: scale(.96, 1.06) translateY(-8px); } }
+.eye { transform-origin: center; transform-box: fill-box; animation: blink 4s infinite; }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+.tail { transform-origin: 20px 140px; animation: wag 2.4s ease-in-out infinite; }
+@keyframes wag { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(8deg); } }
+
+.btn {
+  font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; color: #fff;
+  background: var(--pink-deep); border: 0; border-radius: 999px; padding: 12px 26px; cursor: pointer;
+  box-shadow: 0 5px 0 #b82c6c; transition: transform .1s, box-shadow .1s;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #b82c6c; }
+.btn.alt { background: var(--card); color: var(--pink-deep); box-shadow: 0 5px 0 var(--bg-2); }
+.btn.alt:active { box-shadow: 0 1px 0 var(--bg-2); }
+
+.panel { background: var(--card); border-radius: 28px; padding: 22px 18px; width: 100%; box-shadow: 0 8px 0 var(--bg-2); display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.meter { width: 100%; height: 26px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--pink-deep)); border-radius: 999px; transition: width .6s cubic-bezier(.3,1.4,.5,1); }
+.meter-label { font-family: var(--font-display); font-size: 1.15rem; text-align: center; }
+
+.game { position: relative; width: 100%; min-height: 150px; display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: center; }
+.game .btn { position: relative; }
+#no { position: relative; }
+.win { text-align: center; font-family: var(--font-display); font-size: 1.5rem; color: var(--pink-deep); }
+
+ul.reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; width: 100%; }
+ul.reasons li { background: var(--card); border-radius: 20px; padding: 14px 16px; box-shadow: 0 5px 0 var(--bg-2); display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+ul.reasons svg { flex: none; width: 22px; height: 22px; margin-top: 3px; }
+
+.float { position: fixed; pointer-events: none; z-index: 20; animation: rise 1.8s ease-out forwards; }
+@keyframes rise { from { opacity: 1; transform: translateY(0) scale(.6) rotate(0); } to { opacity: 0; transform: translateY(-260px) scale(1.3) rotate(25deg); } }
+button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.btn { min-height: 48px; }
+@media (max-width: 420px) {
+  body { font-size: 16px; padding-block: 16px 36px; }
+  .panel { padding: 18px 14px; border-radius: 24px; }
+  .btn { font-size: 1.05rem; padding: 12px 20px; }
+  .game { gap: 14px; }
+}
+footer { text-align: center; color: var(--ink-soft); font-size: .95rem; }
+@media (prefers-reduced-motion: reduce) { .eye, .tail, .bounce, .float { animation: none; } .float { display: none; } }
+</style>
+
+<main>
+  <header>
+    <h1>Vale mi amor</h1>
+    <p class="sub">Para que te diviertas un poco, espero te guste bebé</p>
+  </header>
+
+  <section class="stage" aria-label="Gatito Michi">
+    <div class="bubble" id="bubble" aria-live="polite">Hola Vale, soy un gatito</div>
+    <button id="cat" type="button" aria-label="Tocar al gatito">
+      <svg viewBox="0 0 240 230" xmlns="http://www.w3.org/2000/svg">
+        <g class="tail"><path d="M30 150 C-10 140 -5 90 25 95 C10 110 20 130 45 138 Z" fill="#ffd9b0" stroke="#5a2a43" stroke-width="4" stroke-linejoin="round"/></g>
+        <ellipse cx="120" cy="178" rx="62" ry="44" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4"/>
+        <ellipse cx="92" cy="214" rx="20" ry="11" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4"/>
+        <ellipse cx="148" cy="214" rx="20" ry="11" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4"/>
+        <path d="M120 188 c-16-12-12-26 0-20 c12-6 16 8 0 20z" fill="#ff7eb6" stroke="#5a2a43" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M52 62 L58 14 L98 40 Z" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M188 62 L182 14 L142 40 Z" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M62 50 L64 28 L82 40 Z" fill="#ffb3d1"/>
+        <path d="M178 50 L176 28 L158 40 Z" fill="#ffb3d1"/>
+        <ellipse cx="120" cy="92" rx="82" ry="64" fill="#ffe9cf" stroke="#5a2a43" stroke-width="4"/>
+        <g class="eye"><ellipse cx="86" cy="92" rx="8" ry="11" fill="#5a2a43"/><circle cx="89" cy="87" r="3" fill="#fff"/></g>
+        <g class="eye"><ellipse cx="154" cy="92" rx="8" ry="11" fill="#5a2a43"/><circle cx="157" cy="87" r="3" fill="#fff"/></g>
+        <ellipse cx="66" cy="112" rx="13" ry="8" fill="#ff9ec4" opacity=".7"/>
+        <ellipse cx="174" cy="112" rx="13" ry="8" fill="#ff9ec4" opacity=".7"/>
+        <path d="M114 106 h12 l-6 8z" fill="#e6458d" stroke="#5a2a43" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M120 114 v6 M120 120 c-6 8-16 4-18-2 M120 120 c6 8 16 4 18-2" fill="none" stroke="#5a2a43" stroke-width="3" stroke-linecap="round"/>
+        <path d="M44 100 l-26-6 M44 110 l-28 4 M196 100 l26-6 M196 110 l28 4" stroke="#5a2a43" stroke-width="3" stroke-linecap="round"/>
+        <g transform="translate(176 36) rotate(18)">
+          <circle cx="0" cy="-9" r="9" fill="#ff7eb6" stroke="#5a2a43" stroke-width="3"/>
+          <circle cx="9" cy="0" r="9" fill="#ff7eb6" stroke="#5a2a43" stroke-width="3"/>
+          <circle cx="0" cy="9" r="9" fill="#ff7eb6" stroke="#5a2a43" stroke-width="3"/>
+          <circle cx="-9" cy="0" r="9" fill="#ff7eb6" stroke="#5a2a43" stroke-width="3"/>
+          <circle cx="0" cy="0" r="7" fill="#ffd24d" stroke="#5a2a43" stroke-width="3"/>
+        </g>
+      </svg>
+    </button>
+    <button class="btn" id="talk" type="button">Dime algo bonito</button>
+  </section>
+
+  <section class="panel" aria-label="Medidor de amor">
+    <h2>Medidor de amor</h2>
+    <div class="meter" role="progressbar" aria-label="Nivel de amor" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
+    <div class="meter-label" id="meterLabel">Cada toque al gatito sube el amor</div>
+    <button class="btn alt" id="boost" type="button">Subir el amor</button>
+  </section>
+
+  <section class="panel" aria-label="Pregunta importante">
+    <h2>Pregunta importante</h2>
+    <div class="game" id="game">
+      <p style="width:100%;text-align:center;margin:0;font-weight:700">¿Me amas, Vale?</p>
+      <button class="btn" id="yes" type="button">Sí, muchísimo</button>
+      <button class="btn alt" id="no" type="button">No</button>
+    </div>
+  </section>
+
+  <section style="width:100%;display:flex;flex-direction:column;gap:14px">
+    <h2>Por qué te amo</h2>
+    <ul class="reasons" id="reasons"></ul>
+  </section>
+
+  <footer>Hecho con cariño, solo para ti.</footer>
+</main>
+
+<script>
+(function () {
+  var name = 'Vale';
+  var messages = [
+    'Te amo muchísimo, ' + name + '.',
+    'Eres lo más bonito que me pasó.',
+    'Contigo todo es más lindo.',
+    'Eres mi persona favorita del mundo.',
+    'Tu sonrisa me arregla cualquier día.',
+    'Gracias por existir, mi vida.',
+    'Me haces muy feliz, ' + name + '.',
+    'Te pienso a cada rato.',
+    'Contigo quiero lograr todo en la vida.',
+    'Eres mi lugar favorito.',
+    'Te amo mi chinchosa.',
+    'Extraño mucho molestarte en la oficina.',
+    'Te adoro mi niña hermosa.',
+    'Te amo más que a mi vida, por lo tan especial que eres.'
+  ];
+  var reasons = [
+    'Porque me haces reír hasta cuando estoy de mal humor.',
+    'Porque contigo hasta lo simple se siente especial.',
+    'Porque eres dulce, bonita y muy tú.',
+    'Porque lo nuestro es tan especial que solo tú y yo sabemos qué bonito fue.',
+    'Porque me encanta cómo eres, tal cual eres.',
+    'Porque cada día contigo vale la pena.'
+  ];
+  var heartSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.7 1.1 4.7 2.8h2C14 6.1 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z" fill="#ff7eb6" stroke="#5a2a43" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  $('reasons').innerHTML = reasons.map(function (r) { return '<li>' + heartSvg + '<span>' + r + '</span></li>'; }).join('');
+
+  function burst(x, y, n) {
+    if (reduce) return;
+    var symbols = ['💖', '💗', '💕', '🌸', '✨', '🎀'];
+    for (var i = 0; i < n; i++) {
+      var el = document.createElement('span');
+      el.className = 'float';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = (x + (Math.random() - .5) * 120) + 'px';
+      el.style.top = (y + (Math.random() - .5) * 40) + 'px';
+      el.style.fontSize = (18 + Math.random() * 20) + 'px';
+      el.style.animationDelay = (Math.random() * .3) + 's';
+      document.body.appendChild(el);
+      setTimeout(function (e) { e.remove(); }, 2300, el);
+    }
+  }
+
+  var idx = -1, love = 0;
+  function say() {
+    var next;
+    do { next = Math.floor(Math.random() * messages.length); } while (next === idx);
+    idx = next;
+    $('bubble').textContent = messages[idx];
+  }
+  function setLove(v) {
+    love = v;
+    var pct = Math.min(love, 100);
+    $('fill').style.width = pct + '%';
+    document.querySelector('.meter').setAttribute('aria-valuenow', String(pct));
+    if (love >= 100) $('meterLabel').textContent = 'Amor infinito. Ya no cabe en la barra.';
+    else if (love >= 70) $('meterLabel').textContent = 'Casi explota de tanto amor (' + love + '%)';
+    else if (love > 0) $('meterLabel').textContent = 'Amor: ' + love + '%';
+  }
+  function poke(ev) {
+    var c = $('cat');
+    c.classList.remove('bounce'); void c.offsetWidth; c.classList.add('bounce');
+    say();
+    var r = c.getBoundingClientRect();
+    burst(ev && ev.clientX ? ev.clientX : r.left + r.width / 2, ev && ev.clientY ? ev.clientY : r.top + r.height / 2, 6);
+    setLove(Math.min(love + 8, 100));
+  }
+  $('cat').addEventListener('click', poke);
+  $('talk').addEventListener('click', function (e) { poke(e); });
+  $('boost').addEventListener('click', function (e) {
+    setLove(Math.min(love + 20, 100));
+    burst(e.clientX, e.clientY, 8);
+  });
+
+  // Juego: el "No" se escapa
+  var no = $('no'), yes = $('yes'), game = $('game');
+  var yesScale = 1;
+  function dodge() {
+    no.style.transform = 'none';
+    var g = game.getBoundingClientRect(), b = no.getBoundingClientRect();
+    var minX = g.left - b.left, maxX = g.right - b.right;
+    var minY = Math.max(g.top - b.top, -60), maxY = Math.min(g.bottom - b.bottom, 60);
+    if (maxX < minX) { minX = 0; maxX = 0; }
+    if (maxY < minY) { minY = 0; maxY = 0; }
+    var x = minX + Math.random() * (maxX - minX), y = minY + Math.random() * (maxY - minY);
+    no.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    yesScale = Math.min(yesScale + .12, 1.6);
+    yes.style.transform = 'scale(' + yesScale + ')';
+  }
+  ['mouseenter', 'touchstart', 'click', 'focus'].forEach(function (evt) {
+    no.addEventListener(evt, function (e) { e.preventDefault(); dodge(); });
+  });
+  yes.addEventListener('click', function (e) {
+    var r = game.getBoundingClientRect();
+    game.innerHTML = '<div class="win">¡Lo sabía! Yo también te amo, ' + name + ' 💖<br><span style="font-size:1rem;color:var(--ink-soft);font-family:var(--font-body)">Eres la mejor novia del mundo.</span></div>';
+    for (var i = 0; i < 4; i++) setTimeout(function () { burst(r.left + r.width / 2, r.top + r.height / 2, 10); }, i * 250);
+    $('bubble').textContent = '¡Miau! Dijo que sí, ¡qué felicidad!';
+    setLove(100);
+  });
+})();
+</script>
+
+</body></html>
